@@ -27,7 +27,7 @@ global.serverConf = {
     },
     add(a, b) {
         const asdf = new (require('nope.db'))({
-            path: `./srv_setts/${a.json}`,
+            path: `./srv_setts/${a}.json`,
             seperator: '.',
             spaces: 4
         });
