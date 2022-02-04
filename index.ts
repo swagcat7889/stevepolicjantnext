@@ -35,6 +35,13 @@ global.serverConf = {
         let _c = typeof c === 'number' ? c : 0
         _c += 1;
         return asdf.set(b, _c);
+    },
+    zeroify(a, b) {
+        return (new (require('nope.db'))({
+            path: `./srv_setts/${a}.json`,
+            seperator: '.',
+            spaces: 4
+        })).set(b);
     }
 };
 
@@ -46,12 +53,58 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAA 
 */
-// global.izolatka = async (message, victim, time) => {
-//     message.guild.members.cache.get(victim.id).roles
-//     const msg = await message.channel.send(`<@!${victim.id}> był złym stivkiem, więc jest w izolatce`);
-//     msg.react('❤️');
-// }
+global.izolatka = async (message, victim, time) => {
+    await message.guild.roles.fetch();
+    if (global.serverConf.get(message.guild.id, 'stivekrola') === null) return;
+    if (global.serverConf.get(message.guild.id, 'izolatkarola') === null) return;
+    let role1 = message.guild.roles.cache.find((role) => role.id === global.serverConf.get(message.guild.id, 'stivekrola'));
+    let role2 = message.guild.roles.cache.find((role) => role.id === global.serverConf.get(message.guild.id, 'izolatkarola'));
+    victim.roles.add(role2);
+    victim.roles.remove(role1);
+    const a = new MessageEmbed().
+    setTitle('Izolatka').
+    addFields({
+        name: 'Administrator',
+        value: message.author.tag
+    },
+    {
+        name: 'Powód',
+        value: 'Automatyczna izolatka'
+    },
+    {
+        name: 'Czas',
+        value: milisec(time)
+    });
+    const b = new MessageEmbed().
+    setTitle('Odizolowanie').
+    addFields({
+        name: 'Administrator',
+        value: message.client.user.tag
+    },
+    {
+        name: 'Powód',
+        value: 'Automatyczne odizolowanie'
+    },
+    {
+        name: 'Czas',
+        value: milisec(time)
+    });
+    message.guild.members.cache.get(victim.id).roles
+    const msg = await message.channel.send(`<@!${victim.id}> był złym stivkiem, więc jest w izolatce`);
+    msg.react('❤️');
+    await new Promise((a) => setTimeout(a, time));
+    victim.roles.remove(role2);
+    victim.roles.add(role1);
+}
 
+global.warn = async (message, victim) => {
+    let warny = global.serverConf.add(message.guild.id, victim.id);
+    await message.channel.send(`<@!${victim.id}> dostał warna (zły stivek)`);
+    if (warny >= 3) {
+        global.izolatka(message, victim, milisec('30m'));
+        global.serverConf.zeroify(message.guild.id, victim.id);
+    }
+}
 if (!eS('./config.json')) {
     f_wfs('./config.json', JSON.stringify({
         prefix: 'snext ',

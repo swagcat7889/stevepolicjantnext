@@ -1,0 +1,8 @@
+*.d.ts
+*.js
+.env
+tsconfig.tsbuildinfo
+node_modules
+srv_setts
+pseudodb
+config.json

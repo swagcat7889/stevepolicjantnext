@@ -15,11 +15,7 @@ module.exports = {
         if (!victim) {
             return message.reply('Super, nie ma kogo zwarnować...');
         }
-
-        let warny = global.serverConf.add(message.guild.id, message.author.id);
-
-        if (warny >= 3) {
-            global.izolatka(message, victim);
-        }
+        
+        global.warn(message, victim);
     }
 }
