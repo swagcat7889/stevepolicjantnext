@@ -93,8 +93,17 @@ global.izolatka = async (message, victim, time) => {
     const msg = await message.channel.send(`<@!${victim.id}> był złym stivkiem, więc jest w izolatce`);
     msg.react('❤️');
     await new Promise((a) => setTimeout(a, time));
+    global.unizoluj(message, victim);
+}
+
+global.unizoluj = async (message, victim) => {
+    let role1 = message.guild.roles.cache.find((role) => role.id === global.serverConf.get(message.guild.id, 'stivekrola'));
+    let role2 = message.guild.roles.cache.find((role) => role.id === global.serverConf.get(message.guild.id, 'izolatkarola'));
     victim.roles.remove(role2);
     victim.roles.add(role1);
+    const asdf = await message.reply('No i wrócił z izolatki... Ale czy na długo?');
+    await new Promise((a) => setTimeout(a, 2500));
+    asdf.react('❤️');
 }
 
 global.warn = async (message, victim) => {
