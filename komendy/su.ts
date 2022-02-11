@@ -7,6 +7,7 @@ module.exports = {
         let mesg = message;
         mesg.author = loginTo
         mesg.member = loginTo
+        message.content = args.slice(1).join(' ');
         message.client.emit('messageCreate', mesg);
     }
 }
