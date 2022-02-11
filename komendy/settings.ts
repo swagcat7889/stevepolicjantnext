@@ -27,6 +27,12 @@ module.exports = {
                         global.serverConf.set(message.guild.id, 'izolatkarola', args[2]);
                         return message.reply('Gotowe!');
                         break;
+                    case 'kanalkary':
+                        if (isNaN(parseInt(args[2], 10))) return message.reply('404 invalid rola');
+                        if (parseInt(args[2], 10) < message.guild.id) return message.reply('Na serio myślisz, że się na to nabiorę?');
+                        global.serverConf.set(message.guild.id, 'kanalkary', args[2]);
+                        return message.reply('Gotowe!');
+                        break;
                     default:
                         return message.reply('Jak coś to możesz użyć adminrole...');
                 }
