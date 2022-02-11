@@ -41,7 +41,7 @@ global.serverConf = {
             path: `./srv_setts/${a}.json`,
             seperator: '.',
             spaces: 4
-        })).set(b);
+        })).delete(b);
     }
 };
 
